@@ -1,5 +1,8 @@
+# UPDATE INFO THROUGH THE EPOCHS
+
 import numpy as np
 
+# Retreive the data from touchdesigner
 x, y = [], []
 for i in range(1, op('xy').numRows):
 	inst_x = float(op('xy')[i, 'x'])
@@ -12,7 +15,7 @@ b, m = float(op('bias_')[0,0]), float(op('coeff_')[0,0])
 learning_rate = .1
 N = x.shape[0]
 
-
+# calculate the gradient for b and m
 # y = mx + b
 der_m, der_b = [], []
 for x_i, y_i in zip(x, y):
@@ -38,6 +41,8 @@ print("true coeff=", op('ols_')[1,0],
 	"\nssr=", ssr, 
 	"\nepoch=", op('epoch')[op('epoch').numRows-1, 0])
 
+
+# transfer data to touchdesigner
 op('info').par.value0 = op('ols_')[1,0]
 op('info').par.value1 = new_m
 op('info').par.value2 = op('ols_')[1,1]
@@ -58,6 +63,7 @@ op('y_pred').store('y_pred', y_pred)
 op('ssr_').unstore('*')
 op('ssr_').store('ssr', errors)
 
+# update epoche and errors
 n_rows = op('epoch').numRows
 epoch = op('epoch')[n_rows-1, 0]
 epoch+=1

@@ -1,25 +1,29 @@
+# CREATE RANDOM DATA
+
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import random 
 
+# choose parameters
 n_sample = op('parameters').par.value0
 noise = op('parameters').par.value1
 slope_interval = op('parameters').par.value2
 
+# create x, y, intercept and slope
 x = np.arange(n_sample)/n_sample
 slope = random.randint(10, slope_interval)
 bias = np.random.uniform(-10, noise, size=(n_sample,))
 y = (slope * x + bias)/100
 
-
 # random initial parameters
 b, m = random.randint(-150,150)/100, random.randint(-100,100)/100
 
+# errors
 y_pred = b + m*x
 errors = (y - y_pred)**2
 
 
-# transfer data to td
+# transfer data to touchdesigner
 op('data/data_storage_x').unstore('*')
 op('data/data_storage_x').store('num_vars', x)
 
@@ -39,24 +43,7 @@ op('ssr_').unstore('*')
 op('ssr_').store('errors', errors)
 
 
-"""
-op('3d_space').clear()
-intercept, coefficient, y_pred = [], [], []
-
-for i in range(-99, 101):
-	intercept_i = i/100
-
-	for c in range(-99, 101):
-		coefficient_i = c/100
-
-		prediction = intercept_i + x*coefficient_i
-		errors = ((y - prediction).sum())**2
-		row = [intercept_i, coefficient_i, errors]
-		op('3d_space').appendRow(row)
-
-"""
-
-# crate 3d shape 
+# crate error 3d space to visualize local minima 
 intercept, coefficient, errors = [], [], []
 my_range = 100
 steps = 1
@@ -79,6 +66,8 @@ errors = np.array(errors)
 ssr = errors / np.linalg.norm(errors)
 ssr = errors.sum() / x.shape[0] 
 
+
+# transfer 3d data to touchdesigner
 op('xy_ssr').clear()
 
 op('coeff_3d').unstore('*')
@@ -97,7 +86,8 @@ op('epoch').appendRow(epoch)
 op('total_errors').clear()
 op('total_errors').appendRow(ssr)
 
-# plot correct ols
+
+# plot parameters from sklearn to compare 
 x = x.reshape(-1,1)
 reg = LinearRegression().fit(x, y)
 
