@@ -11,12 +11,12 @@ slope_interval = op('parameters').par.value2
 
 # create x, y, intercept and slope
 x = np.arange(n_sample)/n_sample
-slope = random.randint(10, slope_interval)
-bias = np.random.uniform(-10, noise, size=(n_sample,))
+slope = random.randint(1, slope_interval)
+bias = np.random.uniform(-5, noise, size=(n_sample,))
 y = (slope * x + bias)/100
 
 # random initial parameters
-b, m = random.randint(-150,150)/100, random.randint(-100,100)/100
+b, m = random.randint(-100,100)/100, random.randint(-100,100)/100
 
 # errors
 y_pred = b + m*x
@@ -101,10 +101,9 @@ op('row_global_minima').par.rowindexend = b_sklearn
 op('ols_sklearn').clear()
 op('ols_sklearn').appendRow([m_sklearn, b_sklearn])
 
-
-op('info').par.value0 = m
-op('info').par.value1 = m_sklearn
-op('info').par.value2 = b
-op('info').par.value3 = b_sklearn
+#op('info').par.value0 = m
+op('info').par.value1 = m
+#op('info').par.value2 = b
+op('info').par.value3 = b
 op('info').par.value4 = ssr
 op('info').par.value5 = 0
